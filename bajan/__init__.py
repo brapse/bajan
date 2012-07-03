@@ -114,6 +114,7 @@ class Classifier:
         else:
             raise "invalid classifier view %s " % classifier_view 
     
+
     def train(self, label, text):
         """ Update counters """
 
@@ -128,6 +129,7 @@ class Classifier:
                 self.token_counts[label] = Knowledge(0)
             
             self.token_counts[label][token] = self.token_counts[label][token] + count
+
 
     @property
     def document_count(self):
@@ -159,19 +161,14 @@ class Classifier:
     def calculate_spammyness(self, token):
         return (self.spammy_weight * self.token_counts["spam"][token]/self.label_counts["spam"]) - (self.hammy_weight*self.token_counts["ham"][token]/self.label_counts["ham"])
 
-    def classify_spammyness(self, text, label):
+
+    def classify_spammyness(self, text):
         document_spammyness = 0
         for token, occurances in tokenize(text):
             token_spammyness = self.calculate_spammyness(token)
 
             document_spammyness = document_spammyness + (token_spammyness * self.calc_tf_idf(token, occurances))
 
-
-
-        prediction = "spam" if document_spammyness > self.spam_threshhold else "ham"
-        if label  != prediction:
-            print "%f %s" % (document_spammyness, text)
-            
         if document_spammyness > self.spam_threshhold:
             return "spam"
         else: 

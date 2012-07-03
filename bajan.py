@@ -5,11 +5,6 @@ import sys
 from optparse import OptionParser
 from bajan import Classifier
 
-# API:
-# echo "spam\t omg im spam"|bajan train -f knowledge.pkl
-# echo "spam\tAm I spam?|bajan test -f knowledge.pkl
-# echo "spam\tAm I spam?|bajan test -f knowledge.pkl -v
-
 parser = OptionParser()
 parser.add_option("-f", "--file", dest="filename", default="knowledge.pkl",
                   help="persist model to filename")
