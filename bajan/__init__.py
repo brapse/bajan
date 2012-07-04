@@ -23,7 +23,6 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from collections import defaultdict
 
-
 DEFAULT_WEIGHT = 0.001
 
 class Knowledge:
@@ -73,7 +72,6 @@ def tokenize(text):
     
 class Classifier:
     def __init__(self):
-
         self.spammy_weight = 1.0
         self.hammy_weight = 1.0
 
@@ -94,7 +92,8 @@ class Classifier:
         else: 
             return Classifier()
 
-    def display(self, text,classifier_view="normal"):
+    def display(self, text, classifier_view="normal"):
+        """ Display text with classification style """ 
 
         if classifier_view == "normal":
             sys.stdout.write(text)
@@ -159,14 +158,17 @@ class Classifier:
 
 
     def calculate_spammyness(self, token):
+        """ Spammyness measure as the difference of spam score and ham score """
+
         return (self.spammy_weight * self.token_counts["spam"][token]/self.label_counts["spam"]) - (self.hammy_weight*self.token_counts["ham"][token]/self.label_counts["ham"])
 
 
     def classify_spammyness(self, text):
+        """ Classify text based on spammyness measure. This differs from alternative classification as it's a score and not a probability """
+
         document_spammyness = 0
         for token, occurances in tokenize(text):
             token_spammyness = self.calculate_spammyness(token)
-
             document_spammyness = document_spammyness + (token_spammyness * self.calc_tf_idf(token, occurances))
 
         if document_spammyness > self.spam_threshhold:
@@ -175,7 +177,7 @@ class Classifier:
             return "ham"
 
     def classify(self, text):
-        """ Calculate posterior and predict a class """
+        """ Calculate posterior and predict a label """
 
         def stipulate(label):
             prior = 1.0 * self.label_counts[label] / sum(self.label_counts.values())
@@ -204,4 +206,6 @@ class Classifier:
 
 
     def persist(self, filename):
+        """ Pickle the model and persist it to a file """
+
         pickle.dump(self, open(filename, 'wb'))

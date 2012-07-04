@@ -5,15 +5,14 @@ import sys
 from optparse import OptionParser
 from bajan import Classifier
 
-parser = OptionParser()
+usage = "usage: %prog [options] train|test|ham|spam"
+
+parser = OptionParser(usage=usage)
 parser.add_option("-f", "--file", dest="filename", default="knowledge.pkl",
-                  help="persist model to filename")
+                   help="persist model to filename. Default: knowledge.pkl")
 
 parser.add_option("-v", "--view", dest="view", default="normal",
-                  help="""Decorate the output\n
-                       color: color the charecters based on the classifier score
-                       color-tokens: colors the actual tokens that the classifier sees
-                        """)
+                   help="Decorate the output. color, color-tokens or normal. Default: normal")
 
 (options, args) = parser.parse_args()
 
@@ -93,4 +92,4 @@ elif mode == "ham":
 elif mode == "debug":
     classifier.debug()
 else:
-    print "Unknown mode, try train or classify"
+    print "Unknown mode, try train, test, ham or spam"
